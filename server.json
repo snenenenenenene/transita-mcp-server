@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.snenenenenenene/transita-mcp-server",
+  "description": "Visa eligibility matcher and immigration intelligence for MCP-compatible AI assistants.",
+  "repository": {
+    "url": "https://github.com/snenenenenenene/transita-mcp-server",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "websiteUrl": "https://transita.app/mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@transita/mcp-server",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://transita.app/api/mcp"
+    }
+  ]
+}

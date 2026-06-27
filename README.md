@@ -107,8 +107,8 @@ Everything this MCP server exposes is **free**. The full document checklist + 30
 ## Development
 
 ```bash
-git clone https://github.com/snenenenenenene/transita.git
-cd transita/packages/mcp-server
+git clone https://github.com/snenenenenenene/transita-mcp-server.git
+cd transita-mcp-server
 bun install
 bun run build
 
@@ -132,7 +132,7 @@ Two-step flow. The MCP Registry stores metadata; npm hosts the artifact.
 
 ```bash
 # 1. Publish to npm (must be on a fresh version; bump in package.json first)
-cd packages/mcp-server
+cd transita-mcp-server
 bun run build
 npm publish --access public
 
@@ -154,5 +154,5 @@ MIT — see LICENSE.
 
 - Website: <https://transita.app>
 - MCP landing page: <https://transita.app/mcp>
-- Source: <https://github.com/snenenenenenene/transita/tree/main/packages/mcp-server>
+- Source: <https://github.com/snenenenenenene/transita-mcp-server>
 - MCP protocol: <https://modelcontextprotocol.io>

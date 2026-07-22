@@ -14,7 +14,8 @@ export function registerVisaDetails(server: McpServer): void {
     {
       title: "Visa details",
       description:
-        "Fetch full details for a single visa pathway: eligibility category, processing time, fees, validity, PR timeline, and a free preview of the document checklist (lead time, ancillary cost, first section). The full multi-section checklist is part of Transita's $9 paid action plan.",
+        // $49 = keep in sync with apps/web/src/lib/pricing.ts PLAN_PRICE_USD
+        "Fetch full details for a single visa pathway: eligibility category, processing time, fees, validity, PR timeline, and a free preview of the document checklist (lead time, ancillary cost, first section). The full multi-section checklist is part of Transita's $49 paid action plan.",
       inputSchema: {
         visa_id: z
           .string()

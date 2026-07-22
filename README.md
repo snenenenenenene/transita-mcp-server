@@ -68,6 +68,7 @@ Use the same pattern — `command: npx`, `args: ["-y", "@transita/mcp-server"]`.
 | `transita_compare_visas` | Side-by-side comparison of 2-3 visa pathways with deltas (fastest processing, lowest cost, longest validity, PR path). |
 | `transita_country_overview` | Country-level summary: number of visa pathways, EU membership, score dimensions, drawbacks, top cities with rent ranges, PR/citizenship timelines. |
 | `transita_search_by_nationality` | Curated top destinations and recommended visas for citizens of a given country. Best first stop for "where should I move?" |
+| `transita_programme_status` | Live intake status for round-based programmes: whether the programme is open, the date of the last round, and its cutoff score. |
 
 ### Resources (4 base + dynamic templates)
 
@@ -107,8 +108,8 @@ Everything this MCP server exposes is **free**. The full document checklist + 30
 ## Development
 
 ```bash
-git clone https://github.com/snenenenenenene/transita-mcp-server.git
-cd transita-mcp-server
+git clone https://github.com/snenenenenenene/transita.git
+cd transita/packages/mcp-server
 bun install
 bun run build
 
@@ -132,7 +133,7 @@ Two-step flow. The MCP Registry stores metadata; npm hosts the artifact.
 
 ```bash
 # 1. Publish to npm (must be on a fresh version; bump in package.json first)
-cd transita-mcp-server
+cd packages/mcp-server
 bun run build
 npm publish --access public
 
@@ -154,5 +155,5 @@ MIT — see LICENSE.
 
 - Website: <https://transita.app>
 - MCP landing page: <https://transita.app/mcp>
-- Source: <https://github.com/snenenenenenene/transita-mcp-server>
+- Source: <https://github.com/snenenenenenene/transita/tree/main/packages/mcp-server>
 - MCP protocol: <https://modelcontextprotocol.io>

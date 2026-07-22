@@ -6,13 +6,13 @@
     "url": "https://github.com/snenenenenenene/transita-mcp-server",
     "source": "github"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "websiteUrl": "https://transita.app/mcp",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@transita/mcp-server",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "transport": {
         "type": "stdio"
       }

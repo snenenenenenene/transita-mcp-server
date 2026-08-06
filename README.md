@@ -99,17 +99,17 @@ The model will pick the right Transita tool, call it, and synthesise the answer.
 | Env var | Default | Purpose |
 |---|---|---|
 | `TRANSITA_API_URL` | `https://transita.app` | Override the API base URL (useful for local dev against `http://localhost:3000`). |
-| `TRANSITA_MCP_USER_AGENT` | `transita-mcp-server/0.1.0` | Custom UA string for analytics. |
+| `TRANSITA_MCP_USER_AGENT` | `transita-mcp-server/0.1.3` | Custom UA string for analytics. |
 
 ## Free vs paid
 
-Everything this MCP server exposes is **free**. The full document checklist + 30-day action plan is part of Transita's $9 paid plan and lives at `https://transita.app/visa/<id>`. The MCP server's tools include a checklist preview (lead time, ancillary cost, first section) and link to the full plan.
+Everything this MCP server exposes is **free**. The full document checklist + 30-day action plan is part of Transita's paid action plan and lives at `https://transita.app/visa/<id>`. The MCP server's tools include a checklist preview (lead time, ancillary cost, first section) and link to the full plan.
 
 ## Development
 
 ```bash
-git clone https://github.com/snenenenenenene/transita.git
-cd transita/packages/mcp-server
+git clone https://github.com/snenenenenenene/transita-mcp-server.git
+cd transita-mcp-server
 bun install
 bun run build
 
@@ -155,5 +155,5 @@ MIT — see LICENSE.
 
 - Website: <https://transita.app>
 - MCP landing page: <https://transita.app/mcp>
-- Source: <https://github.com/snenenenenenene/transita/tree/main/packages/mcp-server>
+- Source (public mirror): <https://github.com/snenenenenenene/transita-mcp-server>
 - MCP protocol: <https://modelcontextprotocol.io>

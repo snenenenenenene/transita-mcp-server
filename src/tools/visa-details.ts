@@ -2,6 +2,7 @@ import { z } from "zod/v3";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fetchJson } from "../api.js";
 import type { ChecklistPreview, VisaEntry } from "../types.js";
+import { PLAN_PRICE_DISPLAY } from "../constants.js";
 
 interface Response {
   visa: VisaEntry;
@@ -14,8 +15,7 @@ export function registerVisaDetails(server: McpServer): void {
     {
       title: "Visa details",
       description:
-        // $49 = keep in sync with apps/web/src/lib/pricing.ts PLAN_PRICE_USD
-        "Fetch full details for a single visa pathway: eligibility category, processing time, fees, validity, PR timeline, and a free preview of the document checklist (lead time, ancillary cost, first section). The full multi-section checklist is part of Transita's $49 paid action plan.",
+        `Fetch full details for a single visa pathway: eligibility category, processing time, fees, validity, PR timeline, and a free preview of the document checklist (lead time, ancillary cost, first section). The full multi-section checklist is part of Transita's ${PLAN_PRICE_DISPLAY} paid action plan.`,
       inputSchema: {
         visa_id: z
           .string()

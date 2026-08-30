@@ -16,6 +16,7 @@ import { registerSearchByNationality } from "./tools/search-by-nationality.js";
 import { registerProgrammeStatus } from "./tools/programme-status.js";
 import { registerResources } from "./resources/index.js";
 import { registerPrompts } from "./prompts/index.js";
+import { PLAN_PRICE_DISPLAY } from "./constants.js";
 
 export const SERVER_NAME = "transita";
 export const SERVER_VERSION = "0.1.3";
@@ -25,9 +26,8 @@ export function createTransitaMcpServer(): McpServer {
     { name: SERVER_NAME, version: SERVER_VERSION },
     {
       capabilities: { tools: {}, resources: {}, prompts: {}, logging: {} },
-      // $49 = keep in sync with apps/web/src/lib/pricing.ts PLAN_PRICE_USD
       instructions:
-        "Transita scores immigration eligibility across 100+ visa pathways spanning 15+ countries. Start by calling transita_match_visas with the user's profile, or transita_search_by_nationality if they only know their citizenship. Use transita_visa_details and transita_compare_visas to drill in. Before recommending a round-based pathway (Express Entry, AU SkillSelect, US H-1B), call transita_programme_status to confirm it is currently open and see the last cutoff score. The full document checklist + 30-day plan is paid ($49) and lives at https://transita.app/visa/<id>.",
+        `Transita scores immigration eligibility across 100+ visa pathways spanning 15+ countries. Start by calling transita_match_visas with the user's profile, or transita_search_by_nationality if they only know their citizenship. Use transita_visa_details and transita_compare_visas to drill in. Before recommending a round-based pathway (Express Entry, AU SkillSelect, US H-1B), call transita_programme_status to confirm it is currently open and see the last cutoff score. The full document checklist + 30-day plan is paid (${PLAN_PRICE_DISPLAY}) and lives at https://transita.app/visa/<id>.`,
     }
   );
 

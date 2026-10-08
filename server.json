@@ -1,21 +1,60 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.snenenenenenene/transita-mcp-server",
-  "description": "Visa eligibility matcher and immigration intelligence for MCP-compatible AI assistants.",
+  "title": "Transita",
+  "description": "Match a profile against 100+ visas in 16 countries: eligibility, cost, timeline, intake status.",
   "repository": {
     "url": "https://github.com/snenenenenenene/transita-mcp-server",
     "source": "github"
   },
-  "version": "0.1.3",
+  "version": "0.1.6",
   "websiteUrl": "https://transita.app/mcp",
+  "icons": [
+    {
+      "src": "https://transita.app/icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ],
+      "theme": "light"
+    },
+    {
+      "src": "https://transita.app/icon-dark.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ],
+      "theme": "dark"
+    }
+  ],
   "packages": [
     {
       "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@transita/mcp-server",
-      "version": "0.1.3",
+      "version": "0.1.6",
+      "runtimeHint": "npx",
       "transport": {
         "type": "stdio"
-      }
+      },
+      "environmentVariables": [
+        {
+          "name": "TRANSITA_API_URL",
+          "description": "Base URL of the Transita API. Change it only to point at a local dev server.",
+          "format": "string",
+          "isRequired": false,
+          "isSecret": false,
+          "default": "https://transita.app"
+        },
+        {
+          "name": "TRANSITA_MCP_USER_AGENT",
+          "description": "User-Agent sent with each API request.",
+          "format": "string",
+          "isRequired": false,
+          "isSecret": false,
+          "default": "transita-mcp-server/0.1.6"
+        }
+      ]
     }
   ],
   "remotes": [

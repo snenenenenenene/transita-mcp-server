@@ -101,7 +101,7 @@ export function registerMatchVisas(server: McpServer): void {
         officialUrl: r.officialUrl,
         officialSource: r.officialSource,
         description: r.description,
-        details_url: `https://transita.app/visa/${r.id}`,
+        details_url: `https://transita.app/path/${r.id}`,
       }));
 
       const summary = slim.length

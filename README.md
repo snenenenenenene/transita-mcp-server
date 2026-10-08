@@ -1,16 +1,39 @@
 # @transita/mcp-server
 
-> Immigration eligibility intelligence for Claude Desktop, Cursor, Cline, Continue, Zed, and any MCP-compatible AI assistant.
+Visa eligibility and immigration data from [Transita](https://transita.app) for Claude, ChatGPT, Cursor, Cline, Zed and any other MCP client.
 
-[Transita](https://transita.app) figures out which country you should move to — and runs the whole relocation. This MCP server exposes the same matcher, country comparisons, visa checklists, and nationality guides that power transita.app, so you can ask any AI assistant "where should I move?" and get a real, sourced answer.
+Ask your assistant "where should I move?" and it can check your profile against 100+ visas in 16 countries, compare pathways, and tell you whether a programme is open right now. Every answer links to the official government source.
 
-The server is a stateless shim. It calls the public Transita JSON API, so visa data updates the moment transita.app redeploys. No data lives in this package.
+The package holds no data. It calls the public Transita API, so it picks up visa changes as soon as transita.app redeploys. No API key, no account.
+
+There are two ways to connect:
+
+- **Hosted:** `https://transita.app/api/mcp` (Streamable HTTP, no auth). Nothing to install.
+- **Local:** `npx -y @transita/mcp-server` (stdio). Needs Node 20 or newer.
 
 ## Install
 
-### Claude Desktop
+### Claude Code
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+Hosted:
+
+```bash
+claude mcp add --transport http transita https://transita.app/api/mcp
+```
+
+Local:
+
+```bash
+claude mcp add transita -- npx -y @transita/mcp-server
+```
+
+Add `--scope user` to make it available in every project. Run `/mcp` to check it connected.
+
+### Claude Desktop and claude.ai
+
+Hosted: add a custom connector at [claude.ai/customize/connectors](https://claude.ai/customize/connectors) with the URL `https://transita.app/api/mcp`. It shows up in Claude Desktop too.
+
+Local: edit `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS or `%APPDATA%\Claude\claude_desktop_config.json` on Windows, then restart Claude Desktop.
 
 ```json
 {
@@ -23,87 +46,73 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-Restart Claude Desktop. The Transita tools should appear in the input box.
+### ChatGPT
+
+ChatGPT only talks to remote servers, so use the hosted endpoint. Turn on developer mode in ChatGPT's settings, create a new connector, paste `https://transita.app/api/mcp` as the server URL and pick "No authentication". Developer mode is limited to some paid plans and OpenAI moves the menu around, so check their help pages if you can't find it.
 
 ### Cursor
 
-Add to `~/.cursor/mcp.json`:
+Add this to `~/.cursor/mcp.json` for all projects, or `.cursor/mcp.json` for one:
 
 ```json
 {
   "mcpServers": {
     "transita": {
-      "command": "npx",
-      "args": ["-y", "@transita/mcp-server"]
+      "url": "https://transita.app/api/mcp"
     }
   }
 }
 ```
 
-### Cline (VS Code extension)
+For the local version, replace the `url` line with `"command": "npx", "args": ["-y", "@transita/mcp-server"]`.
 
-Open the Cline MCP settings panel and add:
+### Cline, Continue, Zed and others
 
-```json
-{
-  "transita": {
-    "command": "npx",
-    "args": ["-y", "@transita/mcp-server"]
-  }
-}
-```
+Any client that takes a stdio command works with `command: npx` and `args: ["-y", "@transita/mcp-server"]`. Clients that support Streamable HTTP can use `https://transita.app/api/mcp` instead.
 
-### Continue, Zed, any other MCP client
-
-Use the same pattern — `command: npx`, `args: ["-y", "@transita/mcp-server"]`.
-
-## What it exposes
-
-### Tools (5)
+## Tools
 
 | Tool | What it does |
 |---|---|
-| `transita_match_visas` | Score a profile (citizenship, education, work years, income, goal, timeline) against every visa Transita supports. Returns top matches ranked by eligibility. |
-| `transita_visa_details` | Full details for a single visa: eligibility, processing time, fees, validity, PR path, and a free preview of the document checklist. |
-| `transita_compare_visas` | Side-by-side comparison of 2-3 visa pathways with deltas (fastest processing, lowest cost, longest validity, PR path). |
-| `transita_country_overview` | Country-level summary: number of visa pathways, EU membership, score dimensions, drawbacks, top cities with rent ranges, PR/citizenship timelines. |
-| `transita_search_by_nationality` | Curated top destinations and recommended visas for citizens of a given country. Best first stop for "where should I move?" |
-| `transita_programme_status` | Live intake status for round-based programmes: whether the programme is open, the date of the last round, and its cutoff score. |
+| `transita_match_visas` | Scores a profile (citizenship, education, years of work, income, goal, timeline) against every visa and returns the best matches. |
+| `transita_visa_details` | One visa in full: eligibility, processing time, fees, validity, route to permanent residency, and a preview of the document checklist. |
+| `transita_compare_visas` | Puts 2 or 3 visas side by side and points out which is fastest, cheapest, valid longest, and which leads to permanent residency. |
+| `transita_country_overview` | A destination at a glance: number of visas, EU membership, scores, drawbacks, main cities with rent ranges, PR and citizenship timelines. |
+| `transita_search_by_nationality` | Top destinations and recommended visas for citizens of one country. A good first call for "where should I move?". |
+| `transita_programme_status` | Whether a visa is taking applications now. For round-based programmes like Express Entry it also gives the last round's date and cutoff score. |
 
-### Resources (4 base + dynamic templates)
+## Resources
 
-- `transita://visas` — full active visa catalogue
-- `transita://countries` — destination countries + visa counts
-- `transita://nationalities` — index of curated nationality landing pages
-- `transita://nationality/<slug>` — single nationality page (e.g. `transita://nationality/indian`)
+- `transita://visas`: every active visa
+- `transita://countries`: destination countries with visa counts
+- `transita://nationalities`: the nationality guides
+- `transita://nationality/<slug>`: one nationality guide, e.g. `transita://nationality/indian`
 
-### Prompts (3)
+## Prompts
 
-- `find-my-visa` — guided eligibility quiz then `transita_match_visas`
-- `compare-options` — drives `transita_compare_visas` with a chosen set of ids
-- `where-should-i-move` — open exploration starting from nationality
+- `find-my-visa`: asks a few eligibility questions, then calls `transita_match_visas`
+- `compare-options`: runs `transita_compare_visas` on the visas you pick
+- `where-should-i-move`: starts from your nationality and explores from there
 
-## Try it
+## Example questions
 
-Once installed, ask your AI assistant questions like:
-
-- *"I'm an Indian software engineer with a master's and 5 years of experience. Where should I move?"*
-- *"Compare the US O-1A, Germany's EU Blue Card, and Portugal's D8 — which is fastest, cheapest, and which has the best path to permanent residency?"*
-- *"What does Portugal's D8 digital nomad visa actually require?"*
-- *"How do destination scores compare for Germany versus the Netherlands?"*
-
-The model will pick the right Transita tool, call it, and synthesise the answer. Visa data is verified by the Transita team monthly; every match links back to the official government source.
+- "I'm an Indian software engineer with a master's and 5 years of experience. Where should I move?"
+- "Compare the US O-1A, Germany's EU Blue Card and Portugal's D8. Which one gets me permanent residency soonest?"
+- "Is Canada's Express Entry open right now, and what was the last cutoff?"
+- "What does Portugal's D8 digital nomad visa require?"
 
 ## Configuration
 
+Only relevant for the local package.
+
 | Env var | Default | Purpose |
 |---|---|---|
-| `TRANSITA_API_URL` | `https://transita.app` | Override the API base URL (useful for local dev against `http://localhost:3000`). |
-| `TRANSITA_MCP_USER_AGENT` | `transita-mcp-server/0.1.3` | Custom UA string for analytics. |
+| `TRANSITA_API_URL` | `https://transita.app` | API base URL. Point it at `http://localhost:3000` for local development. |
+| `TRANSITA_MCP_USER_AGENT` | `transita-mcp-server/<version>` | User-Agent sent with each API request. |
 
-## Free vs paid
+## Free and paid
 
-Everything this MCP server exposes is **free**. The full document checklist + 30-day action plan is part of Transita's paid action plan and lives at `https://transita.app/visa/<id>`. The MCP server's tools include a checklist preview (lead time, ancillary cost, first section) and link to the full plan.
+Everything the server returns is free. The full document checklist and 30-day action plan are part of Transita's paid plan at `https://transita.app/path/<id>`. Tool results include a checklist preview and a link to the full plan.
 
 ## Development
 
@@ -112,12 +121,15 @@ git clone https://github.com/snenenenenenene/transita-mcp-server.git
 cd transita-mcp-server
 bun install
 bun run build
+```
 
-# Point at a local Transita dev server
+Run it against a local Transita dev server:
+
+```bash
 TRANSITA_API_URL=http://localhost:3000 node dist/cli.js
 ```
 
-To smoke-test from the command line:
+Smoke test from the command line:
 
 ```bash
 {
@@ -127,33 +139,38 @@ To smoke-test from the command line:
 } | node dist/cli.js
 ```
 
-## Publishing to npm + the MCP Registry
+## Publishing
 
-Two-step flow. The MCP Registry stores metadata; npm hosts the artifact.
+npm hosts the package and the MCP Registry holds the metadata in `server.json`. Bump the version in `package.json`, both `version` fields of `server.json`, `src/server.ts` and `src/api.ts` first.
+
+Build and publish to npm:
 
 ```bash
-# 1. Publish to npm (must be on a fresh version; bump in package.json first)
-cd packages/mcp-server
 bun run build
 npm publish --access public
+```
 
-# 2. Publish metadata to the MCP Registry
-#    Install mcp-publisher once: brew install mcp-publisher
-#    server.json is committed alongside this README.
+Push the source to the public mirror:
+
+```bash
+./sync-mirror.sh
+```
+
+Publish the metadata. Install the publisher once with Homebrew first.
+
+```bash
 mcp-publisher login github
 mcp-publisher publish
 ```
 
-After publishing, the server is listed at <https://registry.modelcontextprotocol.io>
-and discoverable inside MCP-compatible clients.
-
 ## License
 
-MIT — see LICENSE.
+MIT, see LICENSE.
 
 ## Links
 
 - Website: <https://transita.app>
-- MCP landing page: <https://transita.app/mcp>
+- MCP page: <https://transita.app/mcp>
 - Source (public mirror): <https://github.com/snenenenenenene/transita-mcp-server>
-- MCP protocol: <https://modelcontextprotocol.io>
+- MCP Registry name: `io.github.snenenenenenene/transita-mcp-server`
+- Model Context Protocol: <https://modelcontextprotocol.io>

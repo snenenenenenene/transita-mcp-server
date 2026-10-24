@@ -1,3 +1,4 @@
+import { READ_ONLY_TOOL } from "../annotations.js";
 import { z } from "zod/v3";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fetchJson } from "../api.js";
@@ -18,6 +19,7 @@ export function registerCompareVisas(server: McpServer): void {
     "transita_compare_visas",
     {
       title: "Compare visas",
+      annotations: READ_ONLY_TOOL,
       description:
         "Compare 2-3 visa pathways side-by-side. Returns processing time, cost, validity, PR-pathway, and a delta summary highlighting the fastest, cheapest, and most permanent option.",
       inputSchema: {

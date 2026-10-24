@@ -1,8 +1,9 @@
+import { READ_ONLY_TOOL } from "../annotations.js";
 import { z } from "zod/v3";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fetchJson } from "../api.js";
 import type { ChecklistPreview, VisaEntry } from "../types.js";
-import { PLAN_PRICE_DISPLAY } from "../constants.js";
+import { siteUrl } from "../links.js";
 
 interface Response {
   visa: VisaEntry;
@@ -14,8 +15,9 @@ export function registerVisaDetails(server: McpServer): void {
     "transita_visa_details",
     {
       title: "Visa details",
+      annotations: READ_ONLY_TOOL,
       description:
-        `Fetch full details for a single visa pathway: eligibility category, processing time, fees, validity, PR timeline, and a free preview of the document checklist (lead time, ancillary cost, first section). The full multi-section checklist is part of Transita's ${PLAN_PRICE_DISPLAY} paid action plan.`,
+        "Fetch full details for a single visa pathway: eligibility category, processing time, fees, validity, PR timeline, and a free preview of the document checklist (lead time, ancillary cost, first section). The full multi-section checklist is part of Transita's paid action plan, which lives on the website.",
       inputSchema: {
         visa_id: z
           .string()
@@ -31,6 +33,7 @@ export function registerVisaDetails(server: McpServer): void {
 
       const v = data.visa;
       const c = data.checklistPreview;
+      const paidPlanUrl = siteUrl(c.paidPlanUrl);
       const lines = [
         `${v.countryFlag} ${v.countryName} — ${v.name} (${v.code})`,
         v.description,
@@ -53,13 +56,16 @@ export function registerVisaDetails(server: McpServer): void {
               .join("\n")
           : null,
         c.totalSections > 1
-          ? `  ${c.totalSections - 1} more section(s) available in the full plan: ${c.paidPlanUrl}`
+          ? `  ${c.totalSections - 1} more section(s) available in the full plan: ${paidPlanUrl}`
           : null,
       ].filter(Boolean);
 
       return {
         content: [{ type: "text", text: lines.join("\n") }],
-        structuredContent: data as unknown as Record<string, unknown>,
+        structuredContent: {
+          ...data,
+          checklistPreview: { ...c, paidPlanUrl },
+        } as unknown as Record<string, unknown>,
       };
     }
   );

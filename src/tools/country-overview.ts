@@ -1,3 +1,4 @@
+import { READ_ONLY_TOOL } from "../annotations.js";
 import { z } from "zod/v3";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fetchJson } from "../api.js";
@@ -14,6 +15,7 @@ export function registerCountryOverview(server: McpServer): void {
     "transita_country_overview",
     {
       title: "Country overview",
+      annotations: READ_ONLY_TOOL,
       description:
         "Get summary data for a destination country: number of visa pathways, EU member status, score dimensions, drawbacks, top cities with rent ranges, and PR/citizenship timelines.",
       inputSchema: {

@@ -7,7 +7,7 @@
     "url": "https://github.com/snenenenenenene/transita-mcp-server",
     "source": "github"
   },
-  "version": "0.1.6",
+  "version": "0.1.7",
   "websiteUrl": "https://transita.app/mcp",
   "icons": [
     {
@@ -32,7 +32,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@transita/mcp-server",
-      "version": "0.1.6",
+      "version": "0.1.7",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"
@@ -52,7 +52,7 @@
           "format": "string",
           "isRequired": false,
           "isSecret": false,
-          "default": "transita-mcp-server/0.1.6"
+          "default": "transita-mcp-server/0.1.7"
         }
       ]
     }

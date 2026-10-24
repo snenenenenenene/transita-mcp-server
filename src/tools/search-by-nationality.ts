@@ -1,7 +1,9 @@
+import { READ_ONLY_TOOL } from "../annotations.js";
 import { z } from "zod/v3";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fetchJson } from "../api.js";
 import type { NationalityPageData } from "../types.js";
+import { siteUrl } from "../links.js";
 
 interface NationalityResponse {
   nationality: NationalityPageData;
@@ -39,8 +41,9 @@ export function registerSearchByNationality(server: McpServer): void {
     "transita_search_by_nationality",
     {
       title: "Search visas by nationality",
+      annotations: READ_ONLY_TOOL,
       description:
-        "Show top destinations and recommended visa pathways for citizens of a given country. Ideal first stop for the question 'Where should I move?'. Returns 4-6 destinations with the best-fit visa for each, key stats, and FAQ. Falls back gracefully if a slug isn't yet curated.",
+        "List destinations and a suggested visa pathway for citizens of a given country: 4 to 6 destinations, each with key stats, plus an FAQ. Use it when the person asks where they could move and only knows their citizenship. Returns a general list if the nationality has no curated page.",
       inputSchema: {
         nationality: z
           .string()
@@ -74,7 +77,7 @@ export function registerSearchByNationality(server: McpServer): void {
             ? ["FAQ:", ...n.faq.slice(0, 3).map((f) => `  Q: ${f.q}\n  A: ${f.a}`)]
             : []),
           "",
-          `More: https://transita.app/from/${n.slug}`,
+          `More: ${siteUrl(`/from/${n.slug}`)}`,
         ];
 
         return {

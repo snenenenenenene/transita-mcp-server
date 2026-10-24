@@ -1,6 +1,8 @@
+import { READ_ONLY_TOOL } from "../annotations.js";
 import { z } from "zod/v3";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fetchJson } from "../api.js";
+import { siteUrl } from "../links.js";
 
 interface Response {
   visaId: string;
@@ -26,6 +28,7 @@ export function registerProgrammeStatus(server: McpServer): void {
     "transita_programme_status",
     {
       title: "Programme status (is this visa open now?)",
+      annotations: READ_ONLY_TOOL,
       description:
         "Check the live intake status of a single visa pathway: whether it is currently open, the last selection round and cutoff score (for round-based programmes like Express Entry, AU SkillSelect, or the US H-1B lottery), what is expected next, and the official source. Call this before recommending a pathway so you never send a user toward a closed or paused programme. Continuous-intake visas return an 'open' status.",
       inputSchema: {
@@ -51,7 +54,7 @@ export function registerProgrammeStatus(server: McpServer): void {
         s.nextExpected ? `Next expected: ${s.nextExpected}` : null,
         `Source: ${s.sourceUrl}`,
         `Data fetched: ${isoDate(s.fetchedAt)}`,
-        `Full pathway: https://transita.app/path/${s.visaId}`,
+        `Full pathway: ${siteUrl(`/path/${s.visaId}`)}`,
       ].filter(Boolean);
 
       return {

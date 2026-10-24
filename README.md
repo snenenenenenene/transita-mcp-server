@@ -74,12 +74,14 @@ Any client that takes a stdio command works with `command: npx` and `args: ["-y"
 
 | Tool | What it does |
 |---|---|
-| `transita_match_visas` | Scores a profile (citizenship, education, years of work, income, goal, timeline) against every visa and returns the best matches. |
+| `transita_match_visas` | Scores a profile (citizenship, education, years of work, income, goal, timeline) against every visa and returns the closest matches, with scores that are estimates. |
 | `transita_visa_details` | One visa in full: eligibility, processing time, fees, validity, route to permanent residency, and a preview of the document checklist. |
 | `transita_compare_visas` | Puts 2 or 3 visas side by side and points out which is fastest, cheapest, valid longest, and which leads to permanent residency. |
 | `transita_country_overview` | A destination at a glance: number of visas, EU membership, scores, drawbacks, main cities with rent ranges, PR and citizenship timelines. |
-| `transita_search_by_nationality` | Top destinations and recommended visas for citizens of one country. A good first call for "where should I move?". |
+| `transita_search_by_nationality` | Destinations and a suggested visa for citizens of one country. Useful when someone asks "where could I move?" and only knows their citizenship. |
 | `transita_programme_status` | Whether a visa is taking applications now. For round-based programmes like Express Entry it also gives the last round's date and cutoff score. |
+
+All tools are read-only: they declare `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true` and `openWorldHint: false`. Nothing is stored or sent on your behalf, and no account or API key is needed.
 
 ## Resources
 

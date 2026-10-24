@@ -12,7 +12,7 @@ export const API_BASE_URL =
   process.env.TRANSITA_API_URL?.replace(/\/$/, "") ?? "https://transita.app";
 
 const USER_AGENT =
-  process.env.TRANSITA_MCP_USER_AGENT ?? "transita-mcp-server/0.1.6";
+  process.env.TRANSITA_MCP_USER_AGENT ?? "transita-mcp-server/0.1.7";
 
 interface FetchJsonOptions {
   method?: "GET" | "POST";

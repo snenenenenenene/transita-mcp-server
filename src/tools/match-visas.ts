@@ -1,7 +1,9 @@
+import { READ_ONLY_TOOL } from "../annotations.js";
 import { z } from "zod/v3";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fetchJson } from "../api.js";
 import type { VisaPath } from "../types.js";
+import { siteUrl } from "../links.js";
 
 interface MatchInput {
   citizenship: string;
@@ -69,8 +71,9 @@ export function registerMatchVisas(server: McpServer): void {
     "transita_match_visas",
     {
       title: "Match visas",
+      annotations: READ_ONLY_TOOL,
       description:
-        "Score a user's profile against every visa pathway Transita supports. Returns the top matches ranked by eligibility, with timeline, cost, and links to official sources. EU citizens automatically surface freedom-of-movement options first.",
+        "Score a profile against every visa pathway Transita covers. Returns the top matches ranked by estimated eligibility, with timeline, cost, and links to official sources. EU citizens see freedom-of-movement options first. Read-only: nothing is stored. Scores are estimates, not legal advice or a decision.",
       inputSchema,
     },
     async (args) => {
@@ -101,7 +104,7 @@ export function registerMatchVisas(server: McpServer): void {
         officialUrl: r.officialUrl,
         officialSource: r.officialSource,
         description: r.description,
-        details_url: `https://transita.app/path/${r.id}`,
+        details_url: siteUrl(`/path/${r.id}`),
       }));
 
       const summary = slim.length
